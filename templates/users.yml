@@ -1,0 +1,31 @@
+id: MODULE_NAME_ENTITY_TYPE
+label: MODULE_NAME User accounts
+migration_group: legacy
+migration_tags:
+  - Drupal 7
+  - Users
+source:
+  plugin: d7_user
+process:
+  uid: uid
+  name:
+    plugin: skip_on_match
+    method: row
+    source: name
+    target: name
+    case_sensitive: true
+  pass: pass
+  mail:
+    plugin: skip_on_match
+    method: row
+    source: mail
+    target: mail
+  created: created
+  access: access
+  login: login
+  changed: changed
+  status: status
+  timezone: timezone
+  init: init
+destination:
+  plugin: entity:user

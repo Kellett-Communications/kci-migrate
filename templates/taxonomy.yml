@@ -1,0 +1,38 @@
+id: MODULE_NAME_ENTITY_TYPE_BUNDLE
+label: BUNDLE taxonomy terms
+migration_group: legacy
+migration_tags:
+  - Drupal 7
+  - Content
+  - taxonomy
+source:
+  plugin: d7_taxonomy_term
+  bundle: BUNDLE
+  translation: false
+  constants:
+    default_text_format: rich_text
+process:
+  langcode:
+    - plugin: default_value
+      source: language
+      default_value: "en"
+    - plugin: language_und_to_en
+  name: name
+  description/value: description
+  description/format: constants/default_text_format
+  weight: weight
+  parent:
+    -
+      plugin: skip_on_empty
+      source: parent
+      method: process
+    -
+      plugin: migration_lookup
+      migration: MODULE_NAME_BUNDLE
+
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: BUNDLE
+migration_dependencies:
+  required:
+    - MODULE_NAME_users

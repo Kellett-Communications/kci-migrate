@@ -1,0 +1,45 @@
+# Copy this file into the site folder (e.g. sites/default) and name it "kci-migrate.yml"
+# The name of the module containing the migrations. Required for the template commands.
+project: my_custom_migrate
+# The following configuration settings are required for the link fixing command.
+migrated_bundles:
+# The machine names of the destination bundles for each entity type that is being migrated.
+# These will be used with the link fix command in order to know which bundles to fix.
+# You only need to include bundles that have text fields that may contain links, or
+# link fields.
+  node:
+    - my_custom_content_type
+    - my_other_custom_content_type
+    - my_third_custom_content_type
+  paragraph:
+    - my_custom_paragraph_type
+    - my_other_custom_paragraph_type
+    - my_third_custom_paragraph_type
+migration_ids:
+# The migration IDs for migrations by entity type.
+# These will be used by the link fix command to lookup the new entity IDs and update links.
+# You can provide only one value, or a list of values, for each entity type.
+# You should include all the types of entities that can be linked to.
+  node:
+    - my_custom_migrate_node_my_custom_content_type
+    - my_custom_migrate_node_my_other_custom_content_type
+    - my_custom_migrate_node_my_third_custom_content_type
+    - my_custom_migrate_node_my_custom_paragraph_type
+    - my_custom_migrate_node_my_other_custom_paragraph_type
+    - my_custom_migrate_node_my_third_custom_paragraph_type
+  media:
+    - my_custom_migrate_media_my_media_type
+hostnames: # The hostnames (domain names) for the site.
+# These will be used by the link fix command to update links that may have been hard-coded.
+# DO NOT include the schema (i.e. https:// or http://). You should include all the possible
+# hostnames that may be used for the site, including www and non-www versions.
+# If these are NOT provided, hard-coded links will NOT be updated at all.
+# You can provide only one value or a list of values. It is recommended to put
+# more specific hostnames first, and more general hostnames last. Otherwise,
+# it may match a partial hostname only in a link.
+  - www.example.com
+  - example.com
+langcode_map: # Map any language codes from the old to the new site, in case they are different.
+# These will be used by the link fix command to update links that may have been hard-coded.
+# The keys should be the new language codes, and the values should be the old language codes.
+  - en: en

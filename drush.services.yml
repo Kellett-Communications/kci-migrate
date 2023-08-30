@@ -1,0 +1,11 @@
+services:
+  kci_migrate.template.commands:
+    class: \Drupal\kci_migrate\Commands\TemplateCommands
+    tags:
+      - { name: drush.command }
+    arguments: ['@file_system', '@extension.path.resolver', '%app.root%', '%site.path%']
+  kci_migrate.content.commands:
+    class: \Drupal\kci_migrate\Commands\ContentCommands
+    tags:
+      - { name: drush.command }
+    arguments: ['@entity_field.manager', '@entity_type.manager', '@migrate.lookup', '@language_manager', '@file_system', '@request_stack', '%app.root%', '%site.path%']

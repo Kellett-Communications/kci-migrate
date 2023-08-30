@@ -1,0 +1,59 @@
+id: MODULE_NAME_ENTITY_TYPE_DESTINATION_BUNDLE
+label: MODULE_NAME DESTINATION_BUNDLE Nodes
+migration_tags:
+  - Drupal 7
+  - Content
+  - Paragraph content
+migration_group: legacy
+source:
+  plugin: d7_node
+  node_type: SOURCE_BUNDLE
+  constants:
+    uid_root: 1
+    default_text_format: rich_text
+process:
+  langcode:
+    - plugin: default_value
+      source: language
+      default_value: "en"
+    - plugin: language_und_to_en
+  uid:
+    - plugin: migration_lookup
+      migration: MODULE_NAME_users
+      source: node_uid
+      no_stub: true
+    - plugin: default_value
+      default_value: constants/uid_root
+  status:
+    plugin: default_value
+    default_value: 1
+  created: created
+
+  # field definitions.
+  # You will need to manually add these.
+
+destination:
+  plugin: entity_reference_revisions:paragraph
+  default_bundle: DESTINATION_BUNDLE
+migration_dependencies:
+  required:
+    - MODULE_NAME_users
+
+#**********************************************************
+# Add these configurations to the node migration:
+#**********************************************************
+#
+# pseudo_DESTINATION_FIELD_NAME:
+#   plugin: migration_lookup
+#   migration: MODULE_NAME_ENTITY_TYPE_DESTINATION_BUNDLE # rename as appropriate
+#   source: nid
+#   no_stub: true
+#
+# DESTINATION_FIELD_NAME:
+#   -
+#     plugin: sub_process
+#     source:
+#       - '@pseudo_DESTINATION_FIELD_NAME'
+#     process:
+#       target_id: '0'
+#       target_revision_id: '1'

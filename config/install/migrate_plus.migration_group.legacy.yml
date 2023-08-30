@@ -1,0 +1,6 @@
+id: legacy
+label: KCI legacy label
+source_type: Drupal 7
+shared_configuration:
+  migration_tags:
+    - Drupal 7

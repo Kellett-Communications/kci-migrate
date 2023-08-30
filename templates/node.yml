@@ -1,0 +1,43 @@
+id: MODULE_NAME_ENTITY_TYPE_DESTINATION_BUNDLE
+label: MODULE_NAME DESTINATION_BUNDLE Nodes
+migration_tags:
+  - Drupal 7
+  - Content
+  - node
+migration_group: legacy
+source:
+  plugin: d7_node
+  node_type: SOURCE_BUNDLE
+  constants:
+    uid_root: 1
+    default_text_format: rich_text
+process:
+  langcode:
+    - plugin: default_value
+      source: language
+      default_value: "en"
+    - plugin: language_und_to_en
+  title: title
+  uid:
+    - plugin: migration_lookup
+      migration: MODULE_NAME_users
+      source: node_uid
+      no_stub: true
+    - plugin: default_value
+      default_value: constants/uid_root
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+
+  # field definitions.
+  body/value: body/0/value
+  body/format: constants/default_text_format
+
+destination:
+  plugin: entity:node
+  default_bundle: DESTINATION_BUNDLE
+migration_dependencies:
+  required:
+    - MODULE_NAME_users

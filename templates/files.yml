@@ -1,0 +1,54 @@
+id: MODULE_NAME_ENTITY_TYPE
+label: MODULE_NAME Public files
+migration_tags:
+  - Drupal 7
+  - Content
+  - Files
+  - Media
+migration_group: legacy
+source:
+  plugin: d7_file
+  scheme: public
+  batch_size: 200
+  constants:
+    uid_root: 1
+    source_base_path: 'public://d7'
+process:
+  fid: fid
+  filename: filename
+  source_full_path:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/source_base_path
+        - filepath
+  uri:
+    plugin: file_copy
+    file_exists: rename
+    source:
+      - '@source_full_path'
+      - uri
+  filemime: filemime
+  filesize: filesize
+  status: status
+  created: timestamp
+  changed: timestamp
+  langcode:
+    - plugin: default_value
+      source: language
+      default_value: "en"
+    - plugin: language_und_to_en
+  uid:
+    - plugin: migration_lookup
+      migration: MODULE_NAME_users
+      source: uid
+      no_stub: true
+    - plugin: default_value
+      default_value: constants/uid_root
+
+destination:
+  plugin: entity:file
+migration_dependencies:
+  required:
+    - MODULE_NAME_users

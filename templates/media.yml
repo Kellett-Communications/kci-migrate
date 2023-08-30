@@ -1,0 +1,56 @@
+id: MODULE_NAME_ENTITY_TYPE_DESTINATION_BUNDLE
+label: MODULE_NAME DESTINATION_BUNDLE Media Type
+migration_tags:
+  - Drupal 7
+  - Content
+  - Media
+migration_group: legacy
+source:
+  plugin: kci_migrate_file
+  scheme: public
+  file_type:
+    - SOURCE_BUNDLE
+  batch_size: 200
+  constants:
+    uid_root: 1
+    source_base_path: 'public://d7'
+process:
+  name: filename
+  filemime: filemime
+  status: status
+  created: timestamp
+  changed: timestamp
+  uid:
+    - plugin: migration_lookup
+      migration: MODULE_NAME_users
+      source: uid
+      no_stub: true
+    - plugin: default_value
+      default_value: constants/uid_root
+  langcode:
+    - plugin: default_value
+      source: language
+      default_value: "en"
+    - plugin: language_und_to_en
+
+  # field definitions.
+  field_media_image/target_id:
+    - plugin: migration_lookup
+      migration: MODULE_NAME_files_files
+      source: fid
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+  field_media_image/display:
+    plugin: default_value
+    default_value: 1
+  field_media_image/alt: field_file_image_alt_text/0/value
+  field_media_image/title: field_file_image_title_text/0/value
+
+destination:
+  plugin: entity:media
+  default_bundle: DESTINATION_BUNDLE
+migration_dependencies:
+  required:
+    - MODULE_NAME_users
+    - MODULE_NAME_files_files
