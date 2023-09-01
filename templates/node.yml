@@ -8,6 +8,7 @@ migration_group: legacy
 source:
   plugin: d7_node
   node_type: SOURCE_BUNDLE
+  track_changes: true
   constants:
     uid_root: 1
     default_text_format: rich_text

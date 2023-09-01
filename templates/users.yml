@@ -6,6 +6,7 @@ migration_tags:
   - Users
 source:
   plugin: d7_user
+  track_changes: true
 process:
   uid: uid
   name:

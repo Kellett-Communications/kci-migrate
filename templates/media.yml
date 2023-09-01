@@ -11,6 +11,7 @@ source:
   file_type:
     - SOURCE_BUNDLE
   batch_size: 200
+  track_changes: true
   constants:
     uid_root: 1
     source_base_path: 'public://d7'

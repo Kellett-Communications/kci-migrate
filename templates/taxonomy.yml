@@ -9,6 +9,7 @@ source:
   plugin: d7_taxonomy_term
   bundle: BUNDLE
   translation: false
+  track_changes: true
   constants:
     default_text_format: rich_text
 process:

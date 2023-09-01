@@ -7,6 +7,7 @@ migration_tags:
 migration_group: legacy
 source:
   plugin: menu_link
+  track_changes: true
   constants:
     bundle: menu_link_content
     default_menu: main
