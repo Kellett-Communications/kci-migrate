@@ -54,4 +54,4 @@ destination:
 migration_dependencies:
   required:
     - MODULE_NAME_users
-    - MODULE_NAME_files_files
+    - MODULE_NAME_files
