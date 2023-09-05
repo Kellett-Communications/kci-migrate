@@ -35,18 +35,18 @@ process:
     - plugin: language_und_to_en
 
   # field definitions.
-  field_media_image/target_id:
+  field_media_CHANGEME/target_id:
     - plugin: migration_lookup
       migration: MODULE_NAME_files_files
       source: fid
       no_stub: true
     - plugin: skip_on_empty
       method: row
-  field_media_image/display:
+  field_media_CHANGEME/display:
     plugin: default_value
     default_value: 1
-  field_media_image/alt: field_file_image_alt_text/0/value
-  field_media_image/title: field_file_image_title_text/0/value
+  field_media_CHANGEME/alt: field_file_image_alt_text/0/value
+  field_media_CHANGEME/title: field_file_image_title_text/0/value
 
 destination:
   plugin: entity:media
