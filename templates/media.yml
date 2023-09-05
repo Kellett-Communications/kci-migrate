@@ -37,7 +37,7 @@ process:
   # field definitions.
   field_media_CHANGEME/target_id:
     - plugin: migration_lookup
-      migration: MODULE_NAME_files_files
+      migration: MODULE_NAME_files
       source: fid
       no_stub: true
     - plugin: skip_on_empty
