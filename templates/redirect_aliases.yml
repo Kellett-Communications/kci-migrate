@@ -22,7 +22,12 @@ process:
   status_code:
     plugin: default_value
     default_value: 301
-  redirect_source/path: alias
+  redirect_source/path:
+    plugin: skip_on_match
+    method: row
+    entity_type: redirect
+    source: alias
+    target: redirect_source__path
 
   pseudo_source_nid:
     -

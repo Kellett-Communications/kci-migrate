@@ -19,7 +19,12 @@ process:
       no_stub: true
     - plugin: default_value
       default_value: constants/uid_root
-  redirect_source/path: source
+  redirect_source/path:
+    plugin: skip_on_match
+    entity_type: redirect
+    method: row
+    source: source
+    target: redirect_source__path
   redirect_source/query:
     plugin: d7_redirect_source_query
     source: source_options
