@@ -1,5 +1,5 @@
-id: MODULE_NAME_redirect_path
-label: MODULE_NAME redirects.
+id: MODULE_NAME_path_redirects
+label: MODULE_NAME path redirects.
 migration_tags:
   - Drupal 7
   - Path Redirect
