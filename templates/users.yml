@@ -12,13 +12,14 @@ process:
   name:
     plugin: skip_on_match
     method: row
+    entity_type: user
     source: name
     target: name
-    case_sensitive: true
   pass: pass
   mail:
     plugin: skip_on_match
     method: row
+    entity_type: user
     source: mail
     target: mail
   created: created
