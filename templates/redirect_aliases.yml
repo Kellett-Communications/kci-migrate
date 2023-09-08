@@ -11,6 +11,38 @@ source:
   constants:
     uid_root: 1
 process:
+  # Skip aliases that are not for nodes.
+  pseudo_skip_on_not_contains_node:
+    plugin: skip_on_condition
+    method: row
+    source: source
+    condition:
+      plugin: not:contains
+      value: 'node/'
+
+  # Skip aliases that already exist as aliases or redirects.
+  pseudo_skip_on_exists:
+    # We need a leading slash to match the destination value.
+    # Now we can go back to the original with no slashes.
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - ''
+        - alias
+    # Skip aliases that already exist.
+    -
+      plugin: skip_on_match
+      entity_type: path_alias
+      method: row
+      target: alias
+    # Skip aliases that are already redirects.
+    -
+      plugin: skip_on_match
+      entity_type: redirect
+      method: row
+      target: redirect_source__path
+
   uid:
     plugin: default_value
     default_value: 1
@@ -22,12 +54,8 @@ process:
   status_code:
     plugin: default_value
     default_value: 301
-  redirect_source/path:
-    plugin: skip_on_match
-    method: row
-    entity_type: redirect
-    source: alias
-    target: redirect_source__path
+
+  redirect_source/path: alias
 
   pseudo_source_nid:
     -
@@ -59,7 +87,7 @@ process:
   redirect_redirect/uri:
     - plugin: d7_path_redirect
       source:
-      - '@pseudo_redirect_uri'
+        - '@pseudo_redirect_uri'
     - plugin: skip_on_empty
       method: row
 
