@@ -90,7 +90,7 @@ final class SkipOnMatch extends ProcessPluginBase implements ContainerFactoryPlu
       $target_property => $value,
     ]);
     if (!empty($entities)) {
-      throw new MigrateSkipRowException('Row skipped because the value (' . $value . ') already exists in the destination.');
+      throw new MigrateSkipRowException('Row skipped because the value (' . $value . ') already exists in the ' . $target_property . ' of ' . $entity_type . '.');
     }
     return $value;
   }
