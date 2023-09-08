@@ -56,9 +56,6 @@ final class SkipOnMatch extends ProcessPluginBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    if (empty($configuration['source']) && !array_key_exists('source', $configuration)) {
-      throw new \InvalidArgumentException('Skip on match plugin is missing source configuration.');
-    }
     if (empty($configuration['target']) && !array_key_exists('target', $configuration)) {
       throw new \InvalidArgumentException('Skip on match plugin is missing target configuration.');
     }
@@ -82,7 +79,6 @@ final class SkipOnMatch extends ProcessPluginBase implements ContainerFactoryPlu
    *   The input value.
    */
   public function row($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property): mixed {
-    $source_property = $this->configuration['source'];
     $target_property = $this->configuration['target'];
     if (!empty($this->configuration['entity_type'])) {
       $entity_type = $this->configuration['entity_type'];
@@ -94,7 +90,7 @@ final class SkipOnMatch extends ProcessPluginBase implements ContainerFactoryPlu
       $target_property => $value,
     ]);
     if (!empty($entities)) {
-      throw new MigrateSkipRowException('Row skipped because the ' . $source_property . ' value (' . $value . ') already exists in the destination.');
+      throw new MigrateSkipRowException('Row skipped because the value (' . $value . ') already exists in the destination.');
     }
     return $value;
   }
