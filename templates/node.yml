@@ -26,7 +26,12 @@ process:
       no_stub: true
     - plugin: default_value
       default_value: constants/uid_root
-  status: status
+  moderation_state:
+     plugin: static_map
+     source: status
+     map:
+        0: archived
+        1: published
   created: created
   changed: changed
   promote: promote
