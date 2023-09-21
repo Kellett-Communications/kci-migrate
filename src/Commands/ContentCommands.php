@@ -531,6 +531,9 @@ class ContentCommands extends CommandBase {
             continue;
           }
           $field_value[$delta]['uri'] = 'entity:' . $link_data['link_path'];
+          if ($link_data['link_new_window']) {
+            $field_value[$delta]['options']['attributes']['target'] = '_blank';
+          }
           $node_entity = $this->getParentNodeEntity($entity);
           if (!($node_entity instanceof EntityInterface)) {
             // If we don't have a node entity, continue. This can
@@ -596,6 +599,9 @@ class ContentCommands extends CommandBase {
         }
         // Now update the href attribute.
         $element->setAttribute('href', $link_data['link_path']);
+        if ($link_data['link_new_window']) {
+          $element->setAttribute('target', '_blank');
+        }
         // If the link is a media entity, we need to add data attributes
         // for the Linkit media entity download plugin to work.
         if (!empty($link_data['link_entity_uuid'])) {
@@ -725,6 +731,7 @@ class ContentCommands extends CommandBase {
       'entity_id'           => NULL,
       'entity_uuid'         => NULL,
       'entity_substitution' => 'canonical',
+      'new_window'          => FALSE,
     ];
     if ($old_entity_data['entity_type'] == 'node' && $old_entity_data['entity_id'] === -1) {
       // A returned node ID of -1 denotes the home page, so we don't
@@ -779,6 +786,8 @@ class ContentCommands extends CommandBase {
         // If the entity is a media entity, we want to use
         // media_download_inline entity substitution.
         $new_entity_data['entity_substitution'] = 'media_download_inline';
+        // Have media links open in a new window.
+        $new_entity_data['new_window'] = TRUE;
       }
     }
     if ($new_entity_data['entity_type'] == 'node' && $new_entity_data['entity_id'] === -1) {
@@ -798,6 +807,7 @@ class ContentCommands extends CommandBase {
       'link_entity_type'         => $new_entity_data['entity_type'],
       'link_entity_uuid'         => $new_entity_data['entity_uuid'],
       'link_entity_substitution' => $new_entity_data['entity_substitution'],
+      'link_new_window'               => $new_entity_data['new_window'],
     ];
   }
 
