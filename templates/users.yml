@@ -8,7 +8,6 @@ source:
   plugin: d7_user
   track_changes: true
 process:
-  uid: uid
   name:
     plugin: skip_on_match
     method: row
