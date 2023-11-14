@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\kci_migrate\Plugin\migrate\source;
 
 use Drupal\file\Plugin\migrate\source\d7\File as CoreFile;
