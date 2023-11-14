@@ -17,7 +17,6 @@ source:
     source_base_path: 'public://d7'
 process:
   name: filename
-  filemime: filemime
   status: status
   created: timestamp
   changed: timestamp
