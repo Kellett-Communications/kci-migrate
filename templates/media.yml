@@ -14,7 +14,11 @@ source:
   track_changes: true
   constants:
     uid_root: 1
-    source_base_path: 'public://d7'
+    # You can also use "public://d7", but then you have to actually copy
+    # all the files into the d7 directory. By using a file path, you can
+    # just symlink d7/sites/[default]/files directory to the actual source
+    # files directory.
+    source_base_path: 'sites/default/files/d7'
 process:
   name: filename
   status: status

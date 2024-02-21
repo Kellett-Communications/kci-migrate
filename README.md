@@ -24,4 +24,4 @@
 
 ## Migrating Files
 
-The file migration template will expect the source files to be stored in `public://d7/sites/[default or multisite-sitename]/files`, so copy all the source files there first. The migration will COPY the files from this folder into the destination site folder so you'll need to delete the d7 folder once all migrations are complete.
+The file migration template will expect the source files to be stored in `sites/default/d7/sites/[default or multisite-sitename]/files`, so copy all the source files there first. The migration will COPY the files from this folder into the destination site folder so you'll need to delete the d7 folder once all migrations are complete.
