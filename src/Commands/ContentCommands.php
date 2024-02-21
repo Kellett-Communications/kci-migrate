@@ -674,6 +674,9 @@ class ContentCommands extends CommandBase {
         $newNode = $dom->createElement('drupal-media', '&nbsp;');
         $newNode->setAttribute('data-entity-type', 'media');
         $newNode->setAttribute('data-entity-uuid', $link_data['link_entity_uuid']);
+        if (!empty($link_data['link_image_style']) && !empty($this->migrateConfig['image_styles_to_media_view_modes'][$link_data['link_image_style']])) {
+          $newNode->setAttribute('data-view-mode', $this->migrateConfig['image_styles_to_media_view_modes'][$link_data['link_image_style']]);
+        }
         $element->parentNode->replaceChild($newNode, $element);
         $this->fieldEmbeddedImageUpdateCount += 1;
         $node_entity = $this->getParentNodeEntity($entity);
@@ -732,6 +735,8 @@ class ContentCommands extends CommandBase {
       'entity_uuid'         => NULL,
       'entity_substitution' => 'canonical',
       'new_window'          => FALSE,
+      // This would only apply to media entities that are images.
+      'image_style'  => '',
     ];
     if ($old_entity_data['entity_type'] == 'node' && $old_entity_data['entity_id'] === -1) {
       // A returned node ID of -1 denotes the home page, so we don't
@@ -807,7 +812,8 @@ class ContentCommands extends CommandBase {
       'link_entity_type'         => $new_entity_data['entity_type'],
       'link_entity_uuid'         => $new_entity_data['entity_uuid'],
       'link_entity_substitution' => $new_entity_data['entity_substitution'],
-      'link_new_window'               => $new_entity_data['new_window'],
+      'link_new_window'          => $new_entity_data['new_window'],
+      'link_image_style'         => $new_entity_data['image_style'],
     ];
   }
 
@@ -1321,12 +1327,14 @@ class ContentCommands extends CommandBase {
       // it's also possible that the filename for the image style is different
       // than the original file name, so we need to check for that as well.
       $file_path_parts = explode('/', $file_path);
+      $image_style = '';
       if (count($file_path_parts) > 1 && $file_path_parts[0] == 'styles') {
         // We have an image style in the path, so we need to remove it.
         // First check to see if the file path matches the pattern
         // 'styles/[style]/public/[file_path]' or
         // 'styles/[style]/private/[file_path]'.
         $file_path = implode('/', array_slice($file_path_parts, 2));
+        $image_style = $file_path_parts[1];
         // Now check to see if the file exists in the public or private
         // file system.
         $public_file_path = 'public://' . $file_path;
@@ -1376,6 +1384,8 @@ class ContentCommands extends CommandBase {
       return [
         'entity_type' => 'file',
         'entity_id'   => (int) $file_id,
+        // Include the image style so we can convert it, if possible.
+        'image_style' => $image_style,
       ];
     }
     // No match.

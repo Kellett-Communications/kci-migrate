@@ -43,3 +43,14 @@ langcode_map: # Map any language codes from the old to the new site, in case the
 # These will be used by the link fix command to update links that may have been hard-coded.
 # The keys should be the new language codes, and the values should be the old language codes.
   - en: en
+image_styles_to_media_view_modes:
+# Map any image styles from the old to media entity view modes in the new site.
+# When the link fixer script runs, it will try to use this map to set the
+# appropriate view mode for embedded images in text fields. The keys should be
+# the image style machine names from the old site and the values should be
+# the view modes in the new site. If there is no mapping for an image style,
+# or this is not provided, the default view mode for the media entity will be
+# used.
+  - thumbnail: thumbnail
+  - medium: medium
+  - large: large
