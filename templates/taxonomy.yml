@@ -8,7 +8,6 @@ migration_tags:
 source:
   plugin: d7_taxonomy_term
   bundle: SOURCE_BUNDLE
-  translation: false
   track_changes: true
   constants:
     default_text_format: rich_text
