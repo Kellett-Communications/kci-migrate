@@ -12,7 +12,15 @@ source:
   track_changes: true
   constants:
     default_text_format: rich_text
+    uid_root: 1
 process:
+  uid:
+    - plugin: migration_lookup
+      migration: MODULE_NAME_users
+      source: node_uid
+      no_stub: true
+    - plugin: default_value
+      default_value: constants/uid_root
   langcode:
     - plugin: default_value
       source: language
