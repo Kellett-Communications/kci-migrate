@@ -1,5 +1,5 @@
-id: MODULE_NAME_ENTITY_TYPE_BUNDLE
-label: BUNDLE taxonomy terms
+id: MODULE_NAME_ENTITY_TYPE_DESTINATION_BUNDLE
+label: MODULE_NAME DESTINATION_BUNDLE taxonomy terms
 migration_group: legacy
 migration_tags:
   - Drupal 7
@@ -7,7 +7,7 @@ migration_tags:
   - taxonomy
 source:
   plugin: d7_taxonomy_term
-  bundle: BUNDLE
+  bundle: SOURCE_BUNDLE
   translation: false
   track_changes: true
   constants:
@@ -29,11 +29,11 @@ process:
       method: process
     -
       plugin: migration_lookup
-      migration: MODULE_NAME_BUNDLE
+      migration: MODULE_NAME_DESTINATION_BUNDLE
 
 destination:
   plugin: entity:taxonomy_term
-  default_bundle: BUNDLE
+  default_bundle: DESTINATION_BUNDLE
 migration_dependencies:
   required:
     - MODULE_NAME_users
