@@ -1,7 +1,7 @@
 name: KCI Migrate
 type: module
 description: Store all default migration tools for KCI projects.
-package: Custom
+package: Migration
 core_version_requirement: ^9 || ^10
 dependencies:
   - drupal:migrate_drupal
