@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\nwtarts_migrate\Plugin\migrate\process;
+namespace Drupal\kci_migrate\Plugin\migrate\process;
 
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
