@@ -51,9 +51,14 @@ process:
   # The following fields only apply to images. Remove them for other
   # media types.
   field_media_CHANGEME/alt:
-    - plugin: default_value
-      source: field_file_image_alt_text/0/value
-      default_value: filename
+    - plugin: get
+      source:
+        - field_file_image_alt_text/0/value
+        - filename
+    - plugin: callback
+      callable: array_filter
+    - plugin: callback
+      callable: current
   field_media_CHANGEME/title: field_file_image_title_text/0/value
 
 destination:
