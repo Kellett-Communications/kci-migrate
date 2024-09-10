@@ -719,6 +719,10 @@ class ContentCommands extends CommandBase {
    */
   protected function newEntityLinkData(string $old_entity_path): array|bool {
     $parsed_url = parse_url($old_entity_path);
+    if ($parsed_url === FALSE) {
+      // If we can't parse the URL, just skip this link.
+      return FALSE;
+    }
     $old_entity_data = $this->entityDataFromParsedUrl($parsed_url);
     if ($old_entity_data === FALSE) {
       // If we don't have a matching link URL, just skip this link.
@@ -1280,17 +1284,25 @@ class ContentCommands extends CommandBase {
     if ($this->pathIsDirectFilePath($path)) {
       return FALSE;
     }
+
     // Try to look up the alias in the migrate database.
-    $query = $this->database->select('redirect', 'r')
-      ->fields('r', ['redirect'])
-      ->condition('source', "{$path}");
-    // Log the database query and bindings.
-    $redirect_path = $query->execute()->fetchField();
-    if (!empty($redirect_path)) {
-      $redirect_path = trim($redirect_path, '/');
-      // We have a matching source path, so return it.
-      return $this->entityPathMatch($redirect_path);
+    try {
+      $query = $this->database->select('redirect', 'r')
+        ->fields('r', ['redirect'])
+        ->condition('source', "{$path}");
+      // Log the database query and bindings.
+      $redirect_path = $query->execute()->fetchField();
+      if (!empty($redirect_path)) {
+        $redirect_path = trim($redirect_path, '/');
+        // We have a matching source path, so return it.
+        return $this->entityPathMatch($redirect_path);
+      }
     }
+    catch (\Exception $e) {
+      // If the redirect table does not exist, then we can't look up
+      // the redirect path, so just skip it.
+    }
+
     return $this->entityPathMatch($path);
   }
 
