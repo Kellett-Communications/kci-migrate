@@ -596,7 +596,7 @@ class ContentCommands extends CommandBase {
             $this->entityLinkUrlsNotUpdated[$field_name] = [];
           }
           $this->entityLinkUrlsNotUpdated[$field_name][] = [
-            'link_text' => $element->nodeValue,
+            'link_text' => $this->getLinkText($element),
             'link_url'  => $href,
           ];
           continue;
@@ -620,12 +620,11 @@ class ContentCommands extends CommandBase {
           // happen in case of an orphaned paragraph entity.
           continue;
         }
-        // Get the element text content.
         $this->linksUpdated[] = [
           'page_url'           => $this->uri . $node_entity->toUrl()->toString(),
           'source_type_bundle' => $entity->getEntityTypeId() . ': ' . $entity->bundle(),
           'field_name'         => $field_name,
-          'link_text'          => $element->nodeValue,
+          'link_text'          => $this->getLinkText($element),
           'old_link_url'       => $href,
           'new_link_url'       => $link_data['link_path'],
         ];
@@ -635,6 +634,31 @@ class ContentCommands extends CommandBase {
     }
     return $value;
 
+  }
+
+  /**
+   * Get the inner HTML of a given DOM Element.
+   *
+   * @param \DOMElement $element
+   *   The DOM element to get the inner HTML of.
+   *
+   * @return string
+   *   The inner HTML of the element.
+   */
+  protected function getLinkText(\DOMElement $element): string {
+    $link_text = trim($element->textContent);
+    if (empty($link_text)) {
+      $innerHTML = '';
+      $children = $element->childNodes;
+      foreach ($children as $child) {
+        $innerHTML .= $element->ownerDocument->saveHTML($child);
+      }
+      $link_text = trim($innerHTML);
+    }
+    if (empty($link_text)) {
+      $link_text = 'Unknown - seems to be an empty link';
+    }
+    return $link_text;
   }
 
   /**
