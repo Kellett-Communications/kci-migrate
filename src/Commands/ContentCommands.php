@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\kci_migrate\Commands;
 
@@ -9,6 +9,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\migrate\MigrateLookupInterface;
@@ -465,7 +466,7 @@ class ContentCommands extends CommandBase {
   /**
    * Update links in a text field.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
    *   The entity to update.
    * @param string $field_name
    *   The field name to update.
@@ -473,7 +474,7 @@ class ContentCommands extends CommandBase {
    * @return int
    *   The number of links updated.
    */
-  protected function updateTextField(EntityInterface $entity, string $field_name): int {
+  protected function updateTextField(FieldableEntityInterface $entity, string $field_name): int {
     $entityTotalUrlUpdateCount = 0;
     $field_value = $entity->get($field_name)->getValue();
     if (!empty($field_value) && is_array($field_value)) {
@@ -498,7 +499,7 @@ class ContentCommands extends CommandBase {
   /**
    * Update links in a link field.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
    *   The entity to update.
    * @param string $field_name
    *   The field name to update.
@@ -506,7 +507,7 @@ class ContentCommands extends CommandBase {
    * @return int
    *   The number of links updated.
    */
-  protected function updateLinkField(EntityInterface $entity, string $field_name): int {
+  protected function updateLinkField(FieldableEntityInterface $entity, string $field_name): int {
     $entityLinkUpdateCount = 0;
     // Get all the values of the link field.
     $field_value = $entity->get($field_name)->getValue();
@@ -567,23 +568,26 @@ class ContentCommands extends CommandBase {
    *   The string to update.
    * @param string $field_name
    *   The field name being updated.
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
    *   The entity being updated.
    *
    * @return string
    *   The updated string.
    */
-  protected function updateHtmlLinks(string $value, string $field_name, EntityInterface $entity): string {
+  protected function updateHtmlLinks(string $value, string $field_name, FieldableEntityInterface $entity): string {
     // First let's trim the string of any excess whitespace.
     $value = trim($value);
     if (!empty($value) && strpos($value, '<a') !== FALSE) {
-      // Ensure we have a non-empty value that contains at least on anchor tag.
+      // Ensure we have a non-empty value that contains at least one anchor tag.
       // Parse the value as html and then turn it into a DOMXPath object.
       $dom = Html::load($value);
       $xpath = new \DOMXPath($dom);
 
       // Now we can tranverse the DOM and update the links.
       foreach ($xpath->query('//a[@href]') as $element) {
+        /**
+         * @var \DOMElement $element
+         */
         $href = $element->getAttribute('href');
         $link_data = $this->newEntityLinkData($href);
         if ($link_data === FALSE) {
@@ -657,6 +661,9 @@ class ContentCommands extends CommandBase {
 
       // Now we can tranverse the DOM and update the links.
       foreach ($xpath->query('//img[@src]') as $element) {
+        /**
+         * @var \DOMElement $element
+         */
         $image_path = $element->getAttribute('src');
         $link_data = $this->newEntityLinkData($image_path);
         if ($link_data === FALSE) {
@@ -899,17 +906,23 @@ class ContentCommands extends CommandBase {
    * This is really just for paragraph entities, but you can
    * pass any entity type in.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
    *   The entity to find the parent of.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
    *   The appropriate node entity, or NULL if not found.
    */
-  protected function getParentNodeEntity(EntityInterface $entity): ?EntityInterface {
+  protected function getParentNodeEntity(FieldableEntityInterface $entity): ?EntityInterface {
     if ($entity->getEntityTypeId() === 'paragraph') {
       if (!isset($this->paragraphParentNodes[$entity->id()])) {
+        /**
+         * @var \Drupal\paragraphs\ParagraphInterface $entity
+         */
         $parent_entity = $entity->getParentEntity();
         while (($parent_entity instanceof EntityInterface) && $parent_entity->getEntityTypeId() !== 'node') {
+          /**
+           * @var \Drupal\paragraphs\ParagraphInterface $parent_entity
+           */
           $parent_entity = $parent_entity->getParentEntity();
         }
         $this->paragraphParentNodes[$entity->id()] = $parent_entity;
