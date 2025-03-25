@@ -1242,11 +1242,16 @@ class ContentCommands extends CommandBase {
     $old_entity_base_paths = [
       'node',
       'file',
+      'files',
     ];
     $matches = [];
     if (preg_match('/(' . implode('|', $old_entity_base_paths) . ')\/(\d+)/', $path, $matches)) {
+      $entity_type = $matches[1];
+      if ($entity_type == 'files') {
+        $entity_type = 'file';
+      }
       return [
-        'entity_type' => $matches[1],
+        'entity_type' => $entity_type,
         'entity_id'   => (int) $matches[2],
       ];
     }
