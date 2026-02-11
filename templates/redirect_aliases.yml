@@ -63,6 +63,18 @@ process:
       source: source
       delimiter: /
 
+  pseudo_skip_on_non_node_redirect:
+    plugin: skip_on_value
+    method: row
+    source: '@pseudo_source_nid/0'
+    value: node
+    not_equals: true
+
+  pseudo_skip_on_missing_target_nid:
+    plugin: skip_on_empty
+    method: row
+    source: '@pseudo_source_nid/1'
+
   pseudo_nid_lookup:
     - plugin: migration_lookup
       source: '@pseudo_source_nid/1'
@@ -77,7 +89,7 @@ process:
     - plugin: single_value
       source: '@pseudo_nid_lookup'
     - plugin: skip_on_empty
-      method: process
+      method: row
     - plugin: concat
       delimiter: /
       source:
